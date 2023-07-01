@@ -1,0 +1,29 @@
+require('dotenv').config;
+const express = require('express');
+const morgan = require('morgan');
+const { default: helmet } = require('helmet');
+const compression = require('compression');
+const { model } = require('mongoose');
+
+const app = express();
+console.log('PROCESS', process.env);
+
+//init middleware global
+app.use(morgan('dev'));
+app.use(helmet());
+app.use(compression());
+//init database
+require('./db/connect.mongoDB');
+
+//init routers
+app.get('/', (req, res, next) => {
+  const strCompress = 'Hello World';
+  return res.status(500).json({
+    message: 'Welcome Hello',
+    metadata: strCompress.repeat(10000),
+  });
+});
+//handling error
+module.exports = app;
+
+//validate email?
