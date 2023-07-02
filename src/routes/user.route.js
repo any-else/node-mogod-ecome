@@ -1,10 +1,10 @@
 const express = require('express');
 const User = require('../models/user.model');
 
-const router = express.Router();
+const route = express.Router();
 
 // Lấy danh sách người dùng
-router.get('/users', async (req, res) => {
+route.get('/users', async (req, res) => {
   try {
     const users = await User.findAll();
     res.json(users);
@@ -15,7 +15,7 @@ router.get('/users', async (req, res) => {
 });
 
 // Thêm người dùng mới
-router.post('/users', async (req, res) => {
+route.post('/users', async (req, res) => {
   try {
     const { name, email } = req.body;
     const user = await User.create({ name, email });
@@ -27,7 +27,7 @@ router.post('/users', async (req, res) => {
 });
 
 // Lấy thông tin một người dùng
-router.get('/users/:id', async (req, res) => {
+route.get('/users/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const user = await User.findByPk(id);
@@ -43,7 +43,7 @@ router.get('/users/:id', async (req, res) => {
 });
 
 // Cập nhật thông tin người dùng
-router.put('/users/:id', async (req, res) => {
+route.put('/users/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const { name, email } = req.body;
@@ -63,7 +63,7 @@ router.put('/users/:id', async (req, res) => {
 });
 
 // Xóa người dùng
-router.delete('/users/:id', async (req, res) => {
+route.delete('/users/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const user = await User.findByPk(id);
@@ -79,4 +79,4 @@ router.delete('/users/:id', async (req, res) => {
   }
 });
 
-module.exports = router;
+module.exports = route;
