@@ -15,6 +15,7 @@ const sessionRoute = require('./routes/session.route');
 // const RedisStore = require('connect-redis').default;
 // const clientRedis = new Redis();
 const baiTapRoute = require('./routes/baitap.route');
+const userRoute = require('./routes/user.route');
 const path = require('path');
 
 const app = express();
@@ -58,5 +59,7 @@ app.use('/cookie', cookieRoute);
 //set up cho ejs
 app.use('/baitap', baiTapRoute);
 
+//route api with sequelize
+app.use('/user', userRoute);
 //handling error
 module.exports = app;

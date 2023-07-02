@@ -3,19 +3,17 @@ const dev = {
     port: process.env.NODE_ENV_DEV_PORT || 8080,
   },
   db: {
-    port: process.env.NODE_ENV_DEV_DB_MYSQL_PORT || 4000,
+    user: process.env.NODE_ENV_DEV_DB_MYSQL_USER || 'root',
     host: process.env.NODE_ENV_DEV_DB_MYSQL_HOST || 'localhost',
     name: process.env.NODE_ENV_DEV_DB_MYSQL_NAME || 'devEcome',
+    password: process.env.NODE_ENV_DEV_DB_MYSQL_PASSWORD || 'Vuvanbui@18',
+    dialect: 'mysql',
   },
-};
-const pro = {
-  app: {
-    port: process.env.NODE_ENV_PRO_PORT || 8081,
-  },
-  db: {
-    port: process.env.NODE_ENV_PRO_DB_MYSQL_PORT || 4000,
-    host: process.env.NODE_ENV_PRO_DB_MYSQL_HOST || 'localhost',
-    name: process.env.NODE_ENV_PRO_DB_MYSQL_NAME || 'proEcome',
+  pool: {
+    max: 5,
+    min: 0,
+    acquire: 30000,
+    idle: 10000,
   },
 };
 
