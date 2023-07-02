@@ -11,9 +11,18 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.20.2",
+    "connect-redis": "^7.1.0",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
     "dotenv": "^16.3.1",
+    "ejs": "^3.1.9",
     "express": "^4.18.2",
-    "mongoose": "^7.3.0"
+    "express-session": "^1.17.3",
+    "ioredis": "^5.3.2",
+    "mongoose": "^7.3.0",
+    "mysql2": "^3.4.3",
+    "redis": "^4.6.7"
   },
   "devDependencies": {
     "compression": "^1.7.4",
