@@ -1,9 +1,9 @@
 const app = require('./src/app');
 
 //init server running
-const port = process.env.PORT || 4000;
-const server = app.listen(port, () => {
-  console.log(`Sever is running at http://localhost:${port}`);
+const PORTS = process.env.PORT || 4000;
+const server = app.listen(PORTS, () => {
+  console.log(`Sever is running at http://localhost:${PORTS}`);
 });
 
 process.on('SIGINT', () => {

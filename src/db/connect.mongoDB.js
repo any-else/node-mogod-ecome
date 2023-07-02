@@ -1,8 +1,12 @@
 'use strict';
 const mongoose = require('mongoose');
-const connectDB = `mongodb://localhost:27017/auth`;
+const config = require('../configs/mongod.config');
+
+const connectDB = `mongodb://${config.db.host}:${config.db.port}/${config.db.name}`;
+
+console.log('database connection', connectDB);
 const { countConnect } = require('../helpers/check.connect');
-const { checkOverload } = require('../helpers/check.connect');
+// const { checkOverload } = require('../helpers/check.connect');
 
 // mongoose
 //   .connect(connectDB)

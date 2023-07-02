@@ -1,6 +1,6 @@
 'use strict';
 const mongoose = require('mongoose');
-const os = require('os');
+const os = require('os'); // được tích hợp sẵn với nodejs để làm việc với thằng với các chức năng trong hệ thống mà mình đang sử dụng
 const process = require('process');
 const _SECONDS = 5000;
 //count Connect

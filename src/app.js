@@ -1,12 +1,10 @@
-require('dotenv').config;
+require('dotenv').config();
 const express = require('express');
 const morgan = require('morgan');
 const { default: helmet } = require('helmet');
 const compression = require('compression');
-const { model } = require('mongoose');
 
 const app = express();
-console.log('PROCESS', process.env);
 
 //init middleware global
 app.use(morgan('dev'));
@@ -25,5 +23,3 @@ app.get('/', (req, res, next) => {
 });
 //handling error
 module.exports = app;
-
-//validate email?
