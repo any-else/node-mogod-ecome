@@ -1,22 +1,19 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../db/connect.mysqlDB');
+const mongoose = require('mongoose'); // Erase if already required
 
-const User = sequelize.define('User', {
-  //Định nghĩa các cột trong bảng user
-  id: {
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
-    primaryKey: true,
+const DOCUMENT_NAME = 'Users';
+const COLLECTION_NAME = 'User';
+// Declare the Schema of the Mongo model
+var userSchema = new mongoose.Schema(
+  {
+    nameImage: {
+      type: String,
+    },
   },
-  name: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  email: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true,
-  },
-});
+  {
+    timestamps: true,
+    collection: COLLECTION_NAME,
+  }
+);
 
-module.exports = User;
+//Export the model
+module.exports = mongoose.model(DOCUMENT_NAME, userSchema);

@@ -1,82 +1,41 @@
-const express = require('express');
-const User = require('../models/user.model');
+const baseUrl = '/api/v1/users';
+const userController = require('../controllers/user.controller');
 
-const route = express.Router();
+const multer = require('multer');
+const uuidv4 = require('uuid/v4');
 
-// Lấy danh sách người dùng
-route.get('/users', async (req, res) => {
-  try {
-    const users = await User.findAll();
-    res.json(users);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Internal server error' });
-  }
+//tao dir
+const DIR = './public/';
+//tao storage dir
+const storage = multer.diskStorage({
+  destination: (req, file, callback) => {
+    callback(null, DIR);
+  },
+  filename: (req, file, callback) => {
+    const fileName = file.originalname.toLowerCase().split(' ').join('-');
+    callback(null, uuidv4() + '-' + fileName);
+  },
 });
 
-// Thêm người dùng mới
-route.post('/users', async (req, res) => {
-  try {
-    const { name, email } = req.body;
-    const user = await User.create({ name, email });
-    res.json(user);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-// Lấy thông tin một người dùng
-route.get('/users/:id', async (req, res) => {
-  try {
-    const { id } = req.params;
-    const user = await User.findByPk(id);
-    if (user) {
-      res.json(user);
+const upload = multer({
+  storage: storage,
+  fileFilter: (req, file, callback) => {
+    if (
+      file.mimetype == 'image/png' ||
+      file.mimetype == 'image/jpg' ||
+      file.mimetype == 'image/jpeg'
+    ) {
+      callback(null, true);
     } else {
-      res.status(404).json({ error: 'User not found' });
+      callback(null, false);
+      return callback(new Error('Only .png, .jpg and .jpeg format allowed!'));
     }
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Internal server error' });
-  }
+  },
 });
 
-// Cập nhật thông tin người dùng
-route.put('/users/:id', async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { name, email } = req.body;
-    const user = await User.findByPk(id);
-    if (user) {
-      user.name = name;
-      user.email = email;
-      await user.save();
-      res.json(user);
-    } else {
-      res.status(404).json({ error: 'User not found' });
-    }
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
+// handle
+const user = (app) => {
+  app.post(`${baseUrl}/upload`, upload.single('nameImage'), userController.uploadImage);
+};
 
-// Xóa người dùng
-route.delete('/users/:id', async (req, res) => {
-  try {
-    const { id } = req.params;
-    const user = await User.findByPk(id);
-    if (user) {
-      await user.destroy();
-      res.json({ message: 'User deleted successfully' });
-    } else {
-      res.status(404).json({ error: 'User not found' });
-    }
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-module.exports = route;
+module.exports = user;

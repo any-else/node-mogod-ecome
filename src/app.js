@@ -8,14 +8,13 @@ const compression = require('compression');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
-const cookieRoute = require('./routes/cookie.route');
 const session = require('express-session');
-const sessionRoute = require('./routes/session.route');
-// const Redis = require('ioredis');
-// const RedisStore = require('connect-redis').default;
-// const clientRedis = new Redis();
-const baiTapRoute = require('./routes/baitap.route');
-const userRoute = require('./routes/user.route');
+const Router = require('./routes/index');
+const createError = require('http-errors');
+const Redis = require('ioredis');
+const RedisStore = require('connect-redis').default;
+const clientRedis = new Redis();
+
 const path = require('path');
 
 const app = express();
@@ -31,8 +30,8 @@ app.use(cookieParser());
 app.use(
   session({
     secret: 'vu dep trai',
-    // store: new RedisStore({ client: clientRedis }),
-    resave: false, // đặt lại session cookie cho mỗi yêu cầu, giả sử cookie hết sau 10 phút  thì nó tự động đặt thêm 10 phút nữa khi mỗi yêu cầu được xảy ra
+    store: new RedisStore({ client: clientRedis }),
+    resave: false,
     saveUninitialized: true, //bất kể có
     cookie: {
       secure: false,
@@ -41,25 +40,25 @@ app.use(
   })
 );
 
+//use file public
+app.use('/public', express.static('public'));
+
 // Config view for ejs
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-//init routers
-app.get('/', (req, res, next) => {
-  return res.status(200).json({
-    message: 'Hello World',
-  });
+//Router
+Router(app);
+//handling error
+//handle url api error
+app.use((req, res, next) => {
+  const errors = createError(404, 'Not Found');
+  next(errors);
+});
+//handle error route
+app.use((err, req, res, next) => {
+  res.status(err.status || 500);
+  res.json({ error: err.message } || 'Internal Server Error');
 });
 
-app.use('/session', sessionRoute);
-
-app.use('/cookie', cookieRoute);
-
-//set up cho ejs
-app.use('/baitap', baiTapRoute);
-
-//route api with sequelize
-app.use('/user', userRoute);
-//handling error
 module.exports = app;

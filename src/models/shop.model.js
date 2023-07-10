@@ -5,28 +5,37 @@ const { model, Schema, Types } = require('mongoose');
 const DOCUMENT_NAME = 'Shop';
 const COLLECTION_NAME = 'Shops';
 // Declare the Schema of the Mongo model
-var shopSchema = new Schema({
-  name: {
-    type: String,
-    required: true,
-    unique: true,
-    index: true,
+var shopSchema = new Schema(
+  {
+    name: {
+      type: String,
+      trim: true,
+      maxLength: 150,
+    },
+    email: {
+      type: String,
+      trim: true,
+      unique: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    status: {
+      type: String,
+      enum: ['active', 'inactive'],
+      default: 'active',
+    },
+    roles: {
+      type: Array,
+      default: [],
+    },
   },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  mobile: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  password: {
-    type: String,
-    required: true,
-  },
-});
+  {
+    timestamps: true,
+    collection: COLLECTION_NAME,
+  }
+);
 
 //Export the model
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model(DOCUMENT_NAME, shopSchema);
